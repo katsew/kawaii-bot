@@ -7,18 +7,18 @@ init:
 
 .PHONY: dev
 dev:
-	cd discord; docker-compose -f docker-compose.dev.yaml up -d
-	cd heartcatch; docker-compose -f docker-compose.dev.yaml up -d
+	cd discord; source .envrc; docker-compose -f docker-compose.dev.yaml up -d
+	cd heartcatch; source .envrc; docker-compose -f docker-compose.dev.yaml up -d
 
 .PHONY: start
 start:
-	cd discord; docker-compose up -d
-	cd heartcatch; docker-compose up -d
+	cd discord; source .envrc; docker-compose up -d
+	cd heartcatch; source .envrc; docker-compose up -d
 
 .PHONY: build
 build:
-	cd discord; docker-compose up -d --build
-	cd heartcatch; docker-compose up -d --build
+	cd discord; source .envrc; docker-compose up -d --build
+	cd heartcatch; source .envrc; docker-compose up -d --build
 
 .PHONY: stop
 stop:
