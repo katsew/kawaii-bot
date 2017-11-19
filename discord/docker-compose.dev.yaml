@@ -1,0 +1,29 @@
+version: '3'
+services:
+  bot-mysql:
+    container_name: bot-mysql
+    image: mysql:5.7.20
+    ports:
+      - 4306:3306
+    volumes:
+      - ./mountd/mysql/var/lib/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_USER=dbuser
+      - MYSQL_PASSWORD=password
+  bot-memcached:
+    container_name: bot-memcached
+    image: memcached:1.5.2
+    ports:
+      - 21211:11211
+  bot-redis:
+    container_name: bot-redis
+    image: redis:4.0.2
+    ports:
+      - 7379:6379
+    volumes:
+      - ./mountd/redis/data:/data
+networks:
+  default:
+    external:
+      name: kawaii-bot
