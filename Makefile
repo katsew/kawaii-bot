@@ -2,6 +2,8 @@
 init:
 	go get -u github.com/golang/dep/cmd/dep
 	dep ensure
+	docker network rm kawaii-bot
+	docker network create kawaii-bot
 
 .PHONY: dev
 dev:
