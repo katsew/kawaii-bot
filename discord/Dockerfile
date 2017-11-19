@@ -1,6 +1,7 @@
 FROM golang:alpine AS build-machine
 
-RUN apk --update add git openssh && \
+RUN apk --update add git openssh ca-certificates && \
+    update-ca-certificates && \
     rm -rf /var/lib/apt/lists/* && \
     rm /var/cache/apk/*
 

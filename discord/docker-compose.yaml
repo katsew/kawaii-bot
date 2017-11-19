@@ -13,7 +13,8 @@ services:
       - "BOT_TOKEN=${BOT_TOKEN}"
       - "BOT_ID=${BOT_ID}"
       - "TARGET_CHANNEL_ID=${TARGET_CHANNEL_ID}"
-      - IMAGE_SEARCH_API_HOST=heartcatch
+      - "TARGET_API_HOST=heartcatch"
+      - "TARGET_API_PORT=5000"
     volumes:
       - "/etc/ssl/certs:/etc/ssl/certs"
   bot-mysql:

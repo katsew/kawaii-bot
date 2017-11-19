@@ -8,6 +8,10 @@ import (
 	"time"
 	ge "github.com/katsew/go-getenv"
 	"github.com/bwmarrin/discordgo"
+	"net/http"
+	"github.com/katsew/kawaii-bot/discord/pkg/resp"
+	"encoding/json"
+	"math/rand"
 )
 
 var (
@@ -33,7 +37,7 @@ func main() {
 	}
 
 	discord.AddHandler(onMessageCreate)
-
+	discord.LogLevel = discordgo.LogDebug
 	err = discord.Open()
 	if err != nil {
 		fmt.Println(err)
@@ -61,9 +65,35 @@ func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	case strings.HasPrefix(m.Content, BotName):
 		msg := strings.TrimPrefix(m.Content, BotName)
 		sendMessage(s, c, "OK, wait a minutes!")
-		log.Printf("Your channelID: %s", c.ID)
-		time.Sleep(3 * time.Second)
-		sendMessage(s, c, msg)
+
+		h := ge.GetEnv("TARGET_API_HOST", "heartcatch")
+		p := ge.GetEnv("TARGET_API_PORT", "5000")
+		req, err := http.NewRequest("GET", fmt.Sprintf("http://%s:%s/images", h, p), nil)
+		if err != nil {
+			sendMessage(s, c, "Sorry...Could not complete your request... ;(")
+			return
+		}
+		q := req.URL.Query()
+		q.Add("q", msg)
+		req.URL.RawQuery = q.Encode()
+
+		client := http.Client{ Timeout: 10 * time.Second }
+		res, err := client.Get(req.URL.String())
+		resJson := new(resp.GoogleAPIResponse)
+		err = json.NewDecoder(res.Body).Decode(resJson)
+		if err != nil {
+			sendMessage(s, c, "Sorry...Could not complete your request... ;(")
+			return
+		}
+		if len(resJson.Items) > 0 {
+			count := len(resJson.Items) - 1
+			rand.Seed(time.Now().UnixNano())
+			idx := rand.Intn(count)
+			item := resJson.Items[idx]
+			sendMessage(s, c, item.Link)
+		} else {
+			sendMessage(s, c, "Sorry...Could not complete your request... ;(")
+		}
 	}
 }
 
