@@ -23,3 +23,7 @@ services:
       - 8379:6379
     volumes:
       - ./mountd/redis/data:/data
+networks:
+  default:
+    external:
+      name: kawaii-bot

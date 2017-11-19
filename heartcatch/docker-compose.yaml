@@ -3,15 +3,18 @@ services:
   heartcatch:
     container_name: heartcatch
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../
+      dockerfile: heartcatch/Dockerfile
     links:
       - hc-redis:redis
       - hc-memcached:memcached
       - hc-mysql:mysql
     environment:
-      - API_KEY=AIzaSyBVHoeHiy5tcDHLFnduamaAtRUfkDNtJXQ
-      - CSE_ID=004012001231330699863:immkyrgd3te
+      - "API_KEY=${API_KEY}"
+      - "CSE_ID=${CSE_ID}"
+      - "API_HOST=0.0.0.0"
+    ports:
+      - "5000:5000"
   hc-mysql:
     container_name: hc-mysql
     image: mysql:5.7.20
@@ -34,4 +37,8 @@ services:
     ports:
       - 8379:6379
     volumes:
-      - ./data/redis/data:/data
+      - ./mountd/redis/data:/data
+networks:
+  default:
+    external:
+      name: kawaii-bot
