@@ -12,12 +12,12 @@ def images():
     cse_id = os.getenvb(b'CSE_ID', b'')
 
     default_query = os.getenvb(b'DEFAULT_QUERY', str('可愛い女の子').encode('utf-8'))
-    query = request.args.get('q', default_query)
+    query = request.args.get('q', default=default_query.decode('utf-8'), type=str)
 
     svc = build("customsearch", "v1", developerKey=api_key.decode('utf-8'))
     try:
         res = svc.cse().list(
-            q=query.decode('utf-8'),
+            q=query,
             cx=cse_id.decode('utf-8'),
             lr='lang_ja',
             searchType='image',
