@@ -91,6 +91,7 @@ func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			idx := rand.Intn(count)
 			item := resJson.Items[idx]
 			sendMessage(s, c, item.Link)
+			sendMessage(s, c, "Is that what you want?")
 		} else {
 			sendMessage(s, c, "Sorry...Could not complete your request... ;(")
 		}
