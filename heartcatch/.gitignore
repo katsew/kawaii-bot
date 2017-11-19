@@ -156,3 +156,4 @@ venv.bak/
 .mypy_cache/
 
 /**/mountd
+.envrc
