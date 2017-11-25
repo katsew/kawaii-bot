@@ -65,7 +65,8 @@ func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	case strings.HasPrefix(m.Content, BotName):
 		if c.Name != TargetChannelName {
 			log.Printf("This is not an appropriate channel: %s", c.Name)
-			sendMessage(s, c, fmt.Sprintf("This is not an appropriate channel, call me on #%s", TargetChannelName))
+			//@todo Implement channel link if available.
+			sendMessage(s, c, fmt.Sprintf("This is not an appropriate channel, call me on %s channel", TargetChannelName))
 			return
 		}
 		msg := strings.TrimPrefix(m.Content, BotName)
