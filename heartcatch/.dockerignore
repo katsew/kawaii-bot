@@ -155,3 +155,11 @@ crashlytics-build.properties
 fabric.properties
 
 containers
+/**/.envrc
+/**/mountd
+/**/venv
+/**/docker-compose.dev.yaml
+/**/docker-compose.yaml
+/**/Makefile
+/**/Dockerfile
+/**/.idea
