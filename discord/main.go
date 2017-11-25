@@ -18,6 +18,7 @@ var (
 	Token string
 	BotName string
 	TargetChannelId string
+	TargetChannelName string
 	stopBot         = make(chan bool)
 )
 
@@ -25,6 +26,7 @@ func init() {
 	Token = fmt.Sprintf("Bot %s", ge.GetEnv("BOT_TOKEN", "").String())
 	BotName = fmt.Sprintf("<@%s>", ge.GetEnv("BOT_ID", "").String())
 	TargetChannelId = ge.GetEnv("TARGET_CHANNEL_ID", "").String()
+	TargetChannelName = ge.GetEnv("TARGET_CHANNEL_NAME", "kawaii").String()
 }
 
 func main() {
@@ -56,13 +58,16 @@ func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	if c.ID != TargetChannelId {
-		log.Printf("This is not a target channel: %s", c.Name)
-		return
+		log.Printf("This is not an appropriate channel: %s", c.ID)
 	}
-	fmt.Printf("%20s %20s %20s > %s\n", m.ChannelID, time.Now().Format(time.Stamp), m.Author.Username, m.Content)
 
 	switch {
 	case strings.HasPrefix(m.Content, BotName):
+		if c.Name != TargetChannelName {
+			log.Printf("This is not an appropriate channel: %s", c.Name)
+			sendMessage(s, c, fmt.Sprintf("This is not an appropriate channel, call me on #%s", TargetChannelName))
+			return
+		}
 		msg := strings.TrimPrefix(m.Content, BotName)
 		sendMessage(s, c, "OK, wait a minutes!")
 
